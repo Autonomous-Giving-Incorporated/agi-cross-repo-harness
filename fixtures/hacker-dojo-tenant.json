@@ -1,0 +1,40 @@
+{
+  "client_id": "hacker-dojo",
+  "tenant_id": "hacker-dojo",
+  "name": "Hacker Dojo",
+  "projects": [
+    {
+      "project_id": "project-robotics",
+      "name": "Intro to Robotics",
+      "need": "Robotics kits for a community workshop",
+      "requested_amount": 250,
+      "currency": "USD",
+      "recommendation_status": "proposed",
+      "allocation_status": "unallocated",
+      "delegation_status": "pending",
+      "impact_status": "pending"
+    },
+    {
+      "project_id": "project-ai-lab",
+      "name": "Community AI Lab",
+      "need": "Laptops and curriculum for an AI learning cohort",
+      "requested_amount": 2500,
+      "currency": "USD",
+      "recommendation_status": "approved",
+      "allocation_status": "approved",
+      "delegation_status": "authorized",
+      "impact_status": "pending"
+    },
+    {
+      "project_id": "project-maker-space",
+      "name": "Open Maker Space",
+      "need": "Fabrication supplies for neighborhood prototyping",
+      "requested_amount": 1200,
+      "currency": "USD",
+      "recommendation_status": "review",
+      "allocation_status": "unallocated",
+      "delegation_status": "pending",
+      "impact_status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+node_modules/
+.env*
+!.env.example
+coverage/
+reports/
+*.log
+
+# Never commit generated credentials or local preview material.
+*.pem
+*.key
+*.jwt
