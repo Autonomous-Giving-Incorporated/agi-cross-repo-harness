@@ -14,6 +14,7 @@ The scaffold validates the local Hacker Dojo multi-project fixture and establish
 - optional single/dual approval policy vocabulary;
 - stable revision and synthetic-fixture evidence expectations.
 - signed RS256 AGI auth context verification against an ephemeral test key and local JWKS.
+- route-intent binding to verified tenant, project, audience, expiry, and capability context.
 
 ## Planned integrations
 

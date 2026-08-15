@@ -34,6 +34,35 @@ function hasStringArray(value) {
   return Array.isArray(value) && value.length > 0 && value.every(nonEmpty);
 }
 
+const ROUTE_ACTIONS = {
+  "project.review": { audience: "fund-intel", capability: "project:read" },
+  "recommendation.review": {
+    audience: "fund-intel",
+    capability: "recommendation:review",
+  },
+  "allocation.propose": {
+    audience: "fund-intel",
+    capability: "allocation:propose",
+  },
+  "allocation.approve": {
+    audience: "fund-intel",
+    capability: "allocation:approve",
+  },
+  "allocation.execute": {
+    audience: "fund-intel",
+    capability: "allocation:execute",
+  },
+  "delegation.authorize": {
+    audience: "impact-relay",
+    capability: "delegation:authorize",
+  },
+  "evidence.review": {
+    audience: "impact-relay",
+    capability: "evidence:review",
+  },
+  "impact.publish": { audience: "impact-relay", capability: "impact:publish" },
+};
+
 function validateAuthContextClaims(payload, { issuer, audience, now }) {
   if (!payload || typeof payload !== "object") return null;
   if (
@@ -139,4 +168,59 @@ export async function verifyAgIAuthContextJwt(
   }
 
   return validateAuthContextClaims(payload, { issuer, audience, now });
+}
+
+/**
+ * Bind a proposed server-side route intent to an already verified AGI context.
+ * The intent is not a credential and is accepted only for explicit actions.
+ */
+export function validateRouteIntent(
+  context,
+  intent,
+  { now = Date.now(), maxTtlMs = 5 * 60 * 1000 } = {},
+) {
+  if (!context || !intent || typeof intent !== "object") return null;
+  const actionPolicy = ROUTE_ACTIONS[intent.action];
+  if (
+    !actionPolicy ||
+    intent.audience !== actionPolicy.audience ||
+    context.audience !== intent.audience ||
+    !nonEmpty(intent.intentId) ||
+    !nonEmpty(intent.client_id) ||
+    !nonEmpty(intent.tenant_id) ||
+    intent.client_id !== intent.tenant_id ||
+    intent.client_id !== context.client_id ||
+    intent.tenant_id !== context.tenant_id ||
+    !nonEmpty(intent.project_id) ||
+    (context.project_id && context.project_id !== intent.project_id) ||
+    !isIsoDate(intent.requestedAt) ||
+    !isIsoDate(intent.expiresAt) ||
+    !Array.isArray(context.capabilities) ||
+    !context.capabilities.includes(actionPolicy.capability)
+  ) {
+    return null;
+  }
+
+  const requestedAt = Date.parse(intent.requestedAt);
+  const expiresAt = Date.parse(intent.expiresAt);
+  if (
+    requestedAt > now ||
+    expiresAt <= now ||
+    expiresAt <= requestedAt ||
+    expiresAt - requestedAt > maxTtlMs
+  ) {
+    return null;
+  }
+
+  return {
+    intentId: intent.intentId,
+    audience: intent.audience,
+    action: intent.action,
+    client_id: intent.client_id,
+    tenant_id: intent.tenant_id,
+    project_id: intent.project_id,
+    requestedAt: intent.requestedAt,
+    expiresAt: intent.expiresAt,
+    requiredCapability: actionPolicy.capability,
+  };
 }
