@@ -15,11 +15,13 @@ The scaffold validates the local Hacker Dojo multi-project fixture and establish
 - stable revision and synthetic-fixture evidence expectations.
 - signed RS256 AGI auth context verification against an ephemeral test key and local JWKS.
 - route-intent binding to verified tenant, project, audience, expiry, and capability context.
+- ajv validation of pinned CONTRACT-008–012 schemas (synthetic payloads only).
+- consumer revision pin in `refs/versions.json` (docs pin, not READY).
 
 ## Planned integrations
 
-1. Pin a released Specs version.
-2. Pin AGI, Fund-Intel, and Impact Relay revisions in CI.
+1. Pin a released Specs version. **Started:** `refs/versions.json` records Specs v2.0.0 + consumer SHAs inspected 2026-08-17.
+2. Pin AGI, Fund-Intel, and Impact Relay revisions in CI. **Started:** same file; CI does not yet check out those trees.
 3. Replace the ephemeral key test with pinned non-production JWKS fixtures when the AGI edge issuer is configured.
 4. Add tenant-isolation tests against synthetic Supabase/preview environments.
 5. Add allocation, optional dual-approval, delegation, evidence, and public-projection acceptance tests.
