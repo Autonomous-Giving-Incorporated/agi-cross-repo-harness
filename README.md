@@ -1,6 +1,6 @@
 # AGI cross-repository harness
 
-Private integration harness for the AGI control plane, Fund-Intel Hacker Dojo tenant implementation, and Impact Relay evidence path.
+Private integration harness for the AGI control plane, Portfolio Signals Hacker Dojo tenant implementation, and Impact Relay evidence path.
 
 This repository is intentionally synthetic and security-focused. It does not contain application secrets, production data, donor records, private evidence, or deployable product code.
 
@@ -15,11 +15,13 @@ The scaffold validates the local Hacker Dojo multi-project fixture and establish
 - stable revision and synthetic-fixture evidence expectations.
 - signed RS256 AGI auth context verification against an ephemeral test key and local JWKS.
 - route-intent binding to verified tenant, project, audience, expiry, and capability context.
+- ajv validation of pinned CONTRACT-008–012 schemas (synthetic payloads only).
+- consumer revision pin in `refs/versions.json` (docs pin, not READY).
 
 ## Planned integrations
 
-1. Pin a released Specs version.
-2. Pin AGI, Fund-Intel, and Impact Relay revisions in CI.
+1. Pin a released Specs version. **Started:** `refs/versions.json` records Specs v2.0.0 (`c089739`) + consumer SHAs observed 2026-08-17 (Portfolio Signals `7c60db8` after #37). Not READY.
+2. Pin AGI, Portfolio Signals, and Impact Relay revisions in CI. **Started:** same file; CI does not yet check out those trees. Unmerged draft SHAs are not recorded.
 3. Replace the ephemeral key test with pinned non-production JWKS fixtures when the AGI edge issuer is configured.
 4. Add tenant-isolation tests against synthetic Supabase/preview environments.
 5. Add allocation, optional dual-approval, delegation, evidence, and public-projection acceptance tests.
