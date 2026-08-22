@@ -26,8 +26,8 @@ The scaffold validates the local Hacker Dojo multi-project fixture and establish
 
 1. Pin a released Specs version. **Started:** `refs/versions.json` records Specs v2.0.0 (`c089739`); consumer SHAs refreshed 2026-08-22. Not READY.
 2. Pin AGI, Portfolio Signals, and Impact Relay revisions in CI. **Done:** `refs/versions.json` pins the SHAs (refreshed 2026-08-22), and the `pinned-sources` CI job (`npm run verify:pinned-sources`, see `src/verify-pinned-sources.mjs`) fetches the real Portfolio Signals / Impact Relay public documents at those pinned revisions and runs the seam verifier against them, failing closed on any security violation or unverifiable source. This network-dependent job is kept separate from the network-free unit tests. Unmerged draft SHAs are not recorded.
-3. Replace the ephemeral key test with pinned non-production JWKS fixtures when the AGI edge issuer is configured.
-4. Add tenant-isolation tests against synthetic Supabase/preview environments.
+3. Replace the ephemeral key test with pinned non-production JWKS fixtures when the AGI edge issuer is configured. **Planned:** see [docs/PLAN-03-pinned-jwks.md](docs/PLAN-03-pinned-jwks.md); gated on the AGI edge issuer (config shape in `refs/auth-config.example.json`).
+4. Add tenant-isolation tests against synthetic Supabase/preview environments. **Planned:** see [docs/PLAN-04-tenant-isolation.md](docs/PLAN-04-tenant-isolation.md); gated on a synthetic Supabase/preview environment.
 5. Add allocation, optional dual-approval, delegation, evidence, and public-projection acceptance tests. **Done:** allocation lifecycle ordering + single/dual approval (`src/lifecycle.mjs`); downstream least-context delegation hand-off (`src/downstream-handoff.mjs`); evidence-attachment acceptance against the canonical CONTRACT-004 shape, append-only + authorized-allocation (`src/evidence-attachment.mjs`); and public-projection privacy (`src/public-source-seam.mjs`).
 
 ## Security rules
