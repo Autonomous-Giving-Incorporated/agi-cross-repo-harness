@@ -2,8 +2,9 @@
 //
 // Fetches the real Portfolio Signals and Impact Relay public documents at the
 // SHAs recorded in refs/versions.json and runs the public-source seam verifier
-// (src/public-source-seam.mjs) against them. Pinned SHAs are immutable, so the
-// fetched content is deterministic.
+// (src/public-source-seam.mjs) against them. Also fetches the pinned AGI
+// C3 policy files and fails closed if they leave PROPOSED without a coordinated
+// status flip. Pinned SHAs are immutable, so the fetched content is deterministic.
 //
 // Exit non-zero (fail closed) on any SECURITY violation or when a pinned source
 // cannot be verified (unfetchable/malformed). A DORMANT-but-safe seam exits 0 -
@@ -14,6 +15,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { verifyC3Policy } from "./c3-public-data-policy.mjs";
 import { verifyPublicSource } from "./public-source-seam.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -80,6 +82,33 @@ async function main() {
       sha: source.sha.slice(0, 8),
       outcome: r.security === "PASS" ? `SECURITY PASS / ${r.live}` : "SECURITY FAIL",
       detail: r.security === "PASS" ? r.livenessReasons.join(", ") : r.errors.join("; "),
+    });
+  }
+
+  const c3Source = {
+    repo: "Autonomous-Giving-Incorporated/Autonomous-Giving-Incorporated",
+    sha: versions.agi,
+  };
+  try {
+    const [contractsTs, policyMarkdown] = await Promise.all([
+      fetchPinned({ ...c3Source, path: "integration/contracts.ts" }),
+      fetchPinned({ ...c3Source, path: "docs/PUBLIC_DATA_POLICY.md" }),
+    ]);
+    const c3 = verifyC3Policy({ contractsTs, policyMarkdown });
+    if (c3.security !== "PASS") blocking += 1;
+    results.push({
+      id: "agi-c3-public-data-policy",
+      sha: c3Source.sha.slice(0, 8),
+      outcome: c3.security === "PASS" ? "SECURITY PASS / PROPOSED" : "SECURITY FAIL",
+      detail: c3.security === "PASS" ? c3.status : c3.errors.join("; "),
+    });
+  } catch (err) {
+    blocking += 1;
+    results.push({
+      id: "agi-c3-public-data-policy",
+      sha: String(c3Source.sha || "").slice(0, 8),
+      outcome: "UNVERIFIABLE",
+      detail: String(err.message || err),
     });
   }
 
