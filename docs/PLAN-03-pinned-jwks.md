@@ -1,6 +1,6 @@
 # Plan: pinned non-production JWKS fixtures (planned integration #3)
 
-**Status:** scaffolded plan. Gated on the AGI edge issuer being configured. Do not implement the live-issuer path until an issuer exists; the synthetic fixture path below can be built independently.
+**Status:** the committed non-production JWKS fixture path is **implemented** (`fixtures/jwks/non-prod-jwks.json` + `fixtures/jwks/pinned-context.jwt`, verified in `tests/jwt-fixture.test.mjs`; the private key was generated offline and never committed). The **live-issuer path remains gated** on the AGI edge issuer being configured.
 
 ## Goal
 
@@ -33,6 +33,6 @@ No private keys, tokens, or live JWKS responses committed. Use GitHub Actions OI
 
 ## Definition of done
 
-- `fixtures/jwks/non-prod-jwks.json` committed (public only); `tests/jwt-verification.test.mjs` verifies against it.
-- A gated live-issuer test that runs only when `AGI_AUTH_*` are set and fails closed otherwise.
+- `fixtures/jwks/non-prod-jwks.json` committed (public only); a test verifies a pinned token against it (`tests/jwt-fixture.test.mjs`). Done.
+- A gated live-issuer test that runs only when `AGI_AUTH_*` are set and fails closed otherwise. Pending the edge issuer.
 - No secrets or private keys in the repo or CI logs.
