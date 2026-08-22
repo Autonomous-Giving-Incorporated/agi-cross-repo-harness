@@ -1,9 +1,9 @@
 {
   "specs": "c089739ba9b05b622a15230cabe717995d5aeffc",
   "specsMain": "26ea13793cdc6862d25b1aeb4207c3c319f4b2ff",
-  "note": "Docs pin to Autonomous-Giving-Specs v2.0.0 (`specs`). Consumer SHAs observed 2026-08-22 after suite-wide GitHub Actions SHA-pinning (AGI #22, Impact-Relay #15, Specs #12, Portfolio-Signals #50). `specsMain` is the Specs workflow-pin revision, not a Specs version bump. Not READY. Unmerged draft SHAs are not recorded here.",
-  "agi": "047e5a1bcd65779346f6e358716332641181b9af",
-  "fundIntel": "5dda59df16d389e4dac109f4ac33d1fd0b95014c",
-  "impactRelay": "d3ab1520b37cfe05a0c29b2199b97d6835b6b76f",
-  "harness": "9296d971957163f6afd4dbe972e273a777d409ce"
+  "note": "Docs pin to Autonomous-Giving-Specs v2.0.0 (`specs`). Consumer SHAs observed 2026-08-22 after C3 packet + pointer + guard merges (AGI #23, Portfolio-Signals #51, Impact-Relay #16, harness #16). `specs` pin unchanged. `specsMain` is the Specs workflow-pin revision, not a Specs version bump. Not READY. C3 remains PROPOSED. Unmerged draft SHAs are not recorded here.",
+  "agi": "5bcb8ea965b9ea8d67b9c55b5b4e8d67c0ddb0d0",
+  "fundIntel": "9b88679fc7c918501b83e14326fea0a1d1d9be46",
+  "impactRelay": "a91d17a3e73f85125c7c944ec8b680188bdb1016",
+  "harness": "fb7c100d5a5e4cc2efc7389a51acc16518749e2f"
 }
