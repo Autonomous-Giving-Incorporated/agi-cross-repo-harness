@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomousgiving.org/schemas/evidence/1.0.0",
+  "$comment": "Vendored from Autonomous-Giving-Specs contracts/CONTRACT-004-evidence.json (schemas/evidence.json) at the Specs revision pinned in refs/versions.json. Producer: Impact Relay; consumer: Autonomous Giving. Keep in sync with the pinned Specs schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["evidenceId", "allocationId", "type", "uri", "capturedAt", "source"],
+  "properties": {
+    "evidenceId": { "type": "string", "format": "uuid" },
+    "allocationId": { "type": "string", "format": "uuid" },
+    "type": { "type": "string", "minLength": 1 },
+    "uri": { "type": "string", "format": "uri" },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "source": { "type": "string", "minLength": 1 }
+  }
+}
