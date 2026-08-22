@@ -1,0 +1,6 @@
+{
+  "$comment": "Example only. Non-secret. The AGI edge issuer supplies these at runtime via CI env/secrets. Never commit a private key or a live JWKS response. See docs/PLAN-03-pinned-jwks.md.",
+  "AGI_AUTH_ISSUER": "https://autogive.app",
+  "AGI_AUTH_AUDIENCES": "fund-intel,impact-relay",
+  "AGI_AUTH_JWKS_URL": "https://REPLACE_WITH_EDGE_ISSUER_HOST/.well-known/jwks.json"
+}
