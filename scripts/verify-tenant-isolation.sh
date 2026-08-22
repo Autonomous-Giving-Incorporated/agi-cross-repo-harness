@@ -40,13 +40,35 @@ check() { # $1 = label, $2 = expected, $3 = actual
   fi
 }
 
-# Positive assertions prove RLS grants correctly; negative assertions prove isolation.
-check "tenant A sees its own decisions"        2 "$(probe "$USER_A" "count(*) from public.decisions")"
-check "tenant A blocked from other tenant"     0 "$(probe "$USER_A" "count(*) from public.decisions where client_id='other-tenant'")"
-check "tenant A sees only its own client"      1 "$(probe "$USER_A" "count(*) from public.clients")"
-check "tenant B sees its own decisions"        1 "$(probe "$USER_B" "count(*) from public.decisions")"
-check "tenant B blocked from other tenant"     0 "$(probe "$USER_B" "count(*) from public.decisions where client_id='hacker-dojo'")"
-check "anonymous sees nothing"                 0 "$(probe '{}' "count(*) from public.decisions")"
+# Attempt an INSERT as the authenticated role; report allowed/denied based on
+# whether RLS permits it. Always rolled back, so nothing persists.
+write_probe() { # $1 = jwt claims json, $2 = client_id
+  if psql "$DATABASE_URL" -qtA -v ON_ERROR_STOP=1 >/dev/null 2>&1 <<SQL
+begin;
+set local request.jwt.claims = '$1';
+set local role authenticated;
+insert into public.decisions (client_id, title) values ('$2', 'synthetic write probe');
+rollback;
+SQL
+  then echo "allowed"; else echo "denied"; fi
+}
+
+DIRECTOR_AAL2='{"sub":"33333333-3333-4333-8333-333333333333","role":"authenticated","aal":"aal2"}'
+DIRECTOR_AAL1='{"sub":"33333333-3333-4333-8333-333333333333","role":"authenticated","aal":"aal1"}'
+
+# Read isolation: positive assertions prove RLS grants; negatives prove isolation.
+check "tenant A sees its own decisions"          2 "$(probe "$USER_A" "count(*) from public.decisions")"
+check "tenant A blocked from other tenant"       0 "$(probe "$USER_A" "count(*) from public.decisions where client_id='other-tenant'")"
+check "tenant A sees only its own client"        1 "$(probe "$USER_A" "count(*) from public.clients")"
+check "tenant B sees its own decisions"          1 "$(probe "$USER_B" "count(*) from public.decisions")"
+check "tenant B blocked from other tenant"       0 "$(probe "$USER_B" "count(*) from public.decisions where client_id='hacker-dojo'")"
+check "anonymous sees nothing"                   0 "$(probe '{}' "count(*) from public.decisions")"
+
+# Write isolation + privilege/MFA gate.
+check "director (aal2) writes its own tenant"    allowed "$(write_probe "$DIRECTOR_AAL2" 'hacker-dojo')"
+check "director (aal2) blocked cross-tenant"     denied  "$(write_probe "$DIRECTOR_AAL2" 'other-tenant')"
+check "director without aal2 cannot write (MFA)" denied  "$(write_probe "$DIRECTOR_AAL1" 'hacker-dojo')"
+check "board_viewer cannot write"                denied  "$(write_probe "$USER_A" 'hacker-dojo')"
 
 if [[ "$fail" -ne 0 ]]; then
   echo "TENANT ISOLATION FAILED"

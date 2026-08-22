@@ -4,12 +4,14 @@
 
 ## Implemented (2026-08-22)
 
-Supabase branching (the disposable path against the real AGI project) requires the Pro plan, and the org's free-project quota was already full, so we do **not** touch the production AGI database. Instead, the isolation test runs against a throwaway **Postgres service container** carrying `sql/tenant-isolation-slice.sql` - a synthetic replica whose SECURITY DEFINER helpers (`is_client_member`, `current_client_role`, `is_master_admin`, `current_session_aal`) and SELECT policies are reproduced **verbatim** from the AGI Supabase project (extracted read-only), with `auth.uid()`/`auth.jwt()` shimmed to read `request.jwt.claims` exactly as Supabase does.
+Supabase branching (the disposable path against the real AGI project) requires the Pro plan, and the org's free-project quota was already full, so we do **not** touch the production AGI database. Instead, the isolation test runs against a throwaway **Postgres service container** carrying `sql/tenant-isolation-slice.sql` - a synthetic replica whose SECURITY DEFINER helpers (`is_client_member`, `current_client_role`, `is_master_admin`, `current_session_aal`) and policies are reproduced **verbatim** from the AGI Supabase project (extracted read-only), with `auth.uid()`/`auth.jwt()` shimmed to read `request.jwt.claims` exactly as Supabase does.
 
-- `scripts/verify-tenant-isolation.sh` applies the slice, then probes as the `authenticated` role with per-tenant JWT claims and asserts: tenant A sees its own rows (positive) and 0 cross-tenant rows (isolation), tenant B likewise, and anonymous sees nothing. Fails closed on any mismatch.
+- `scripts/verify-tenant-isolation.sh` applies the slice, then probes as the `authenticated` role with per-tenant JWT claims and asserts both **read** and **write** isolation, fail closed:
+  - reads: tenant A sees its own rows (positive) and 0 cross-tenant rows (isolation), tenant B likewise, anonymous sees nothing;
+  - writes + privilege/MFA gate: a director writes only its own tenant and **only with MFA/aal2** (a director without aal2 is denied), a cross-tenant write is denied, and a board_viewer cannot write at all.
 - CI job `tenant-isolation` (`.github/workflows/ci.yml`) runs it against a `postgres:16` service - deterministic, synthetic, no secrets, no production access.
 
-Verified locally and in CI: all six checks pass ("TENANT ISOLATION VERIFIED").
+Verified locally and in CI: all ten checks pass ("TENANT ISOLATION VERIFIED").
 
 ### Optional future enhancement: live Supabase run
 

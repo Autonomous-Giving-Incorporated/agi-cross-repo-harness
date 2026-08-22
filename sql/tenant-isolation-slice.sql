@@ -111,7 +111,7 @@ create or replace function public.is_master_admin() returns boolean
   )
 $$;
 
--- RLS + SELECT policies (verbatim quals from the platform).
+-- RLS + policies (verbatim quals from the platform).
 alter table public.clients enable row level security;
 alter table public.client_memberships enable row level security;
 alter table public.decisions enable row level security;
@@ -122,19 +122,25 @@ create policy "members read client memberships" on public.client_memberships
   for select using (is_client_member(client_id) or is_master_admin());
 create policy "client members read decisions" on public.decisions
   for select using (is_client_member(client_id));
+create policy "client directors decide" on public.decisions
+  for all using (current_client_role(client_id) = any (array['director'::app_role, 'campaign_lead'::app_role]));
 
-grant select on public.clients, public.client_memberships, public.decisions, public.profiles to authenticated;
+grant select on public.clients, public.client_memberships, public.profiles to authenticated;
+grant select, insert, update, delete on public.decisions to authenticated;
 grant execute on all functions in schema public to anon, authenticated;
 grant execute on all functions in schema auth to anon, authenticated;
 
--- Synthetic seed: two tenants, one board_viewer member each, tenant-scoped rows.
+-- Synthetic seed: two tenants, board_viewer members, an MFA-enforced director,
+-- and tenant-scoped rows.
 insert into public.profiles (id, active, mfa_enforced) values
   ('11111111-1111-4111-8111-111111111111', true, false),
-  ('22222222-2222-4222-8222-222222222222', true, false);
+  ('22222222-2222-4222-8222-222222222222', true, false),
+  ('33333333-3333-4333-8333-333333333333', true, true);
 insert into public.clients (id, state) values ('hacker-dojo','active'), ('other-tenant','active');
 insert into public.client_memberships (client_id, user_id, role, active) values
   ('hacker-dojo','11111111-1111-4111-8111-111111111111','board_viewer', true),
-  ('other-tenant','22222222-2222-4222-8222-222222222222','board_viewer', true);
+  ('other-tenant','22222222-2222-4222-8222-222222222222','board_viewer', true),
+  ('hacker-dojo','33333333-3333-4333-8333-333333333333','director', true);
 insert into public.decisions (client_id, title) values
   ('hacker-dojo','HD decision 1'), ('hacker-dojo','HD decision 2'),
   ('other-tenant','OT decision 1');
