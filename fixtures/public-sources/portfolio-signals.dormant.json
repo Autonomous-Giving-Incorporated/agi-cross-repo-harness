@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-08-08",
+  "authority": "advisory_only",
+  "execution": { "state": "blocked", "reason": "canonical_tenant_data_requires_authenticated_membership" },
+  "allocations": [],
+  "privacy": {
+    "classification": "public_aggregate_only",
+    "piiAllowed": false,
+    "rawRegistryAllowed": false,
+    "donorHistoryAllowed": false,
+    "privateNotesAllowed": false
+  }
+}

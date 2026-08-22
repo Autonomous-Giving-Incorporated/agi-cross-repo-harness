@@ -16,12 +16,13 @@ The scaffold validates the local Hacker Dojo multi-project fixture and establish
 - signed RS256 AGI auth context verification against an ephemeral test key and local JWKS.
 - route-intent binding to verified tenant, project, audience, expiry, and capability context.
 - ajv validation of pinned CONTRACT-008–012 schemas (synthetic payloads only).
+- public-source seam verification for the documents the AGI public workbench actually consumes (Portfolio Signals `data/public-campaign.json`, authority `advisory_only`; Impact Relay `data/public-impact.json`, authority `public_aggregate_only`): authority, privacy classification/flags, and donor-identity residue **fail closed**, while freshness and VERIFIED-outcome are reported as liveness (a dormant seam is safe — the AGI consumer falls back to its deterministic fixture). See `src/public-source-seam.mjs`.
 - consumer revision pin in `refs/versions.json` (docs pin, not READY).
 
 ## Planned integrations
 
 1. Pin a released Specs version. **Started:** `refs/versions.json` records Specs v2.0.0 (`c089739`) + consumer SHAs observed 2026-08-17 (Portfolio Signals `7c60db8` after #37). Not READY.
-2. Pin AGI, Portfolio Signals, and Impact Relay revisions in CI. **Started:** same file; CI does not yet check out those trees. Unmerged draft SHAs are not recorded.
+2. Pin AGI, Portfolio Signals, and Impact Relay revisions in CI. **Started:** `refs/versions.json` records the SHAs, and `src/public-source-seam.mjs` verifies the AGI-consumed public documents against synthetic fixtures. Remaining: wire CI to check out (or fetch at the pinned SHA) the real consumer public documents and run the seam verifier against them. Unmerged draft SHAs are not recorded.
 3. Replace the ephemeral key test with pinned non-production JWKS fixtures when the AGI edge issuer is configured.
 4. Add tenant-isolation tests against synthetic Supabase/preview environments.
 5. Add allocation, optional dual-approval, delegation, evidence, and public-projection acceptance tests.

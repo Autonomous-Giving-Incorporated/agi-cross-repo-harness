@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-08-08",
+  "authority": "public_aggregate_only",
+  "summary": { "outcomeCount": 0, "totalParticipantsPublic": 0 },
+  "outcomes": [],
+  "privacy": {
+    "classification": "public_aggregate_only",
+    "piiAllowed": false,
+    "donorNamesAllowed": false,
+    "individualDonorAttributionAllowed": false,
+    "operatorIdentityAllowed": false
+  }
+}
