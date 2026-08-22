@@ -13,6 +13,7 @@ and no application server to launch. The test suite in `tests/` is the deliverab
   no separate app to start, no dev server, and no lint or build script defined.
 - Network jobs (CI only): `npm run verify:pinned-sources` and `npm run verify:pinned-actions`.
   The actions pin-guard uses `GITHUB_TOKEN` in CI for GitHub API rate limits.
+  `verify:pinned-sources` also checks the pinned AGI C3 policy files; they must stay PROPOSED.
 - The JWT verification test mints an ephemeral in-memory RS256 key pair per run; no secrets,
   keys, or JWKS responses are stored. Do not add secrets to source control (see `.gitignore`,
   which blocks `*.pem`/`*.key`/`*.jwt` and `.env*`).
