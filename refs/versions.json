@@ -1,9 +1,9 @@
 {
   "specs": "c089739ba9b05b622a15230cabe717995d5aeffc",
-  "specsMain": "f45a40bddc2d70ecbdb49464cd1a35d0e2486c45",
-  "note": "Docs pin to Autonomous-Giving-Specs v2.0.0 (`specs`). Consumer SHAs observed 2026-08-22 after PLAN-03 live-issuer merge (harness #18) and Specs #14/#15 (PyYAML + jsonschema pins). `specs` pin unchanged. `specsMain` tracks Specs main for workflow SHA-pin scans, not a Specs version bump. Specs workflow files at this tip match the previous #12 pin. Not READY. C3 remains PROPOSED. Unmerged draft SHAs are not recorded here.",
+  "specsMain": "4aa680f05d789781f7c595c3b1c69a8b8ee5cd58",
+  "note": "Docs pin to Autonomous-Giving-Specs v2.0.0 (`specs`). Consumer SHAs observed 2026-08-22 after PS #52 (`4c38323`), IR #17 (`59e3e8f`), Specs #17 (`4aa680f`), and harness #19. `specs` pin unchanged. `specsMain` tracks Specs main for workflow SHA-pin scans, not a Specs version bump. Not READY. C3 remains PROPOSED. Unmerged draft SHAs are not recorded here.",
   "agi": "5bcb8ea965b9ea8d67b9c55b5b4e8d67c0ddb0d0",
-  "fundIntel": "9b88679fc7c918501b83e14326fea0a1d1d9be46",
-  "impactRelay": "a91d17a3e73f85125c7c944ec8b680188bdb1016",
-  "harness": "9c33734c02902133fdc35a6f9613aa0aa58ed1bf"
+  "fundIntel": "4c38323be8d5da9a4d966663c12e9e5bd0743545",
+  "impactRelay": "59e3e8fdf49fe0d7592b9e91082b907e028682b4",
+  "harness": "758e6559d8dfb529a9b455e935092660ade991ba"
 }
