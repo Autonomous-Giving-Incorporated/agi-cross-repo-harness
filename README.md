@@ -17,6 +17,7 @@ The scaffold validates the local Hacker Dojo multi-project fixture and establish
 - route-intent binding to verified tenant, project, audience, expiry, and capability context.
 - ajv validation of pinned CONTRACT-008–012 schemas (synthetic payloads only).
 - public-source seam verification for the documents the AGI public workbench actually consumes (Portfolio Signals `data/public-campaign.json`, authority `advisory_only`; Impact Relay `data/public-impact.json`, authority `public_aggregate_only`): authority, privacy classification/flags, and donor-identity residue **fail closed**, while freshness and VERIFIED-outcome are reported as liveness (a dormant seam is safe — the AGI consumer falls back to its deterministic fixture). See `src/public-source-seam.mjs`.
+- lifecycle and approval verification (`src/lifecycle.mjs`): recommendation precedes approval precedes allocation precedes delegation precedes verified impact; single vs dual approval; amount-threshold-triggered dual; distinct authorized approvers; tenant/project/correlation binding; and idempotent de-duplication. Synthetic doubles only — no production auth.
 - consumer revision pin in `refs/versions.json` (docs pin, not READY).
 
 ## Planned integrations
@@ -25,7 +26,7 @@ The scaffold validates the local Hacker Dojo multi-project fixture and establish
 2. Pin AGI, Portfolio Signals, and Impact Relay revisions in CI. **Done:** `refs/versions.json` pins the SHAs (refreshed 2026-08-22), and the `pinned-sources` CI job (`npm run verify:pinned-sources`, see `src/verify-pinned-sources.mjs`) fetches the real Portfolio Signals / Impact Relay public documents at those pinned revisions and runs the seam verifier against them, failing closed on any security violation or unverifiable source. This network-dependent job is kept separate from the network-free unit tests. Unmerged draft SHAs are not recorded.
 3. Replace the ephemeral key test with pinned non-production JWKS fixtures when the AGI edge issuer is configured.
 4. Add tenant-isolation tests against synthetic Supabase/preview environments.
-5. Add allocation, optional dual-approval, delegation, evidence, and public-projection acceptance tests.
+5. Add allocation, optional dual-approval, delegation, evidence, and public-projection acceptance tests. **Started:** allocation lifecycle ordering + single/dual approval (incl. threshold-triggered dual, distinct approvers, tenant/project/correlation binding, idempotency) landed in `src/lifecycle.mjs`. Remaining: delegation hand-off and evidence-attachment acceptance.
 
 ## Security rules
 
