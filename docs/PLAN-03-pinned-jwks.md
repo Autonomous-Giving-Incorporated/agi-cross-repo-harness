@@ -1,6 +1,6 @@
 # Plan: pinned non-production JWKS fixtures (planned integration #3)
 
-**Status:** the committed non-production JWKS fixture path is **implemented** (`fixtures/jwks/non-prod-jwks.json` + `fixtures/jwks/pinned-context.jwt`, verified in `tests/jwt-fixture.test.mjs`; the private key was generated offline and never committed). The **live-issuer path remains gated** on the AGI edge issuer being configured.
+**Status:** the committed non-production JWKS fixture path is **implemented** (`fixtures/jwks/non-prod-jwks.json` + `fixtures/jwks/pinned-context.jwt`, verified in `tests/jwt-fixture.test.mjs`; the private key was generated offline and never committed). The live-issuer **config + fetch** path is **implemented** (`src/live-jwks.mjs`, `tests/live-jwks.test.mjs`): skip when `AGI_AUTH_*` are unset; fail closed on incomplete/insecure config, an unresolvable JWKS URL, an invalid key set, or private key material. Verifying a token minted by a real AGI edge issuer remains gated on that issuer existing.
 
 ## Goal
 
@@ -20,8 +20,8 @@ See `refs/auth-config.example.json` for the non-secret shape. Until the issuer e
 
 1. **Committed public JWKS fixture (buildable now).** Generate a non-production RSA keypair offline. Commit **only** the public JWKS as `fixtures/jwks/non-prod-jwks.json` with a stable `kid`. Never commit the private key.
 2. **Signing synthetic tokens.** Prefer minting test tokens at runtime with a keypair whose public half matches the fixture `kid`, kept deterministic per run (as today), so no private key is stored. If a fixed non-production private key is unavoidable, inject it as a CI secret (e.g. `AGI_TEST_SIGNING_KEY`) used only to mint synthetic tokens - never committed, never logged.
-3. **Live-issuer acceptance (gated).** When `AGI_AUTH_JWKS_URL` is set, fetch the issuer's non-production JWKS and verify a synthetic token minted by the issuer's non-production signing path. Skip this test when the env var is absent so default CI stays deterministic and offline.
-4. Feed the fixture (or fetched) JWKS straight into `verifyAgIAuthContextJwt`.
+3. **Live-issuer acceptance (gated).** `readLiveIssuerConfig` / `fetchLiveJwks` implement the contract. When `AGI_AUTH_*` are unset, the gated test skips so default CI stays deterministic and offline. When they are set, the helper fetches the issuer JWKS and **fails closed** (no weaker fallback) if the URL is unresolvable or the body is not a public RS256 JWKS. Verifying a token minted by the issuer's non-production signing path still waits on that issuer.
+4. Feed the fixture (or fetched) JWKS straight into `verifyAgIAuthContextJwt`. The injected-fetch test already wires the committed public fixture through `fetchLiveJwks` into the verifier.
 
 ## Fail-closed behavior (already enforced by the verifier)
 
@@ -34,5 +34,5 @@ No private keys, tokens, or live JWKS responses committed. Use GitHub Actions OI
 ## Definition of done
 
 - `fixtures/jwks/non-prod-jwks.json` committed (public only); a test verifies a pinned token against it (`tests/jwt-fixture.test.mjs`). Done.
-- A gated live-issuer test that runs only when `AGI_AUTH_*` are set and fails closed otherwise. Pending the edge issuer.
+- A gated live-issuer test that skips when `AGI_AUTH_*` are unset and fails closed when they are set but the JWKS cannot be used (`src/live-jwks.mjs`). Done for config + fetch. Live token verification still waits on the edge issuer.
 - No secrets or private keys in the repo or CI logs.

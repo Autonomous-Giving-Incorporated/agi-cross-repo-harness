@@ -18,4 +18,8 @@ and no application server to launch. The test suite in `tests/` is the deliverab
   keys, or JWKS responses are stored. Do not add secrets to source control (see `.gitignore`,
   which blocks `*.pem`/`*.key`/`*.jwt` and `.env*`).
 - The env var names in `README.md` (`AGI_AUTH_ISSUER`, `AGI_AUTH_AUDIENCES`, `AGI_AUTH_JWKS_URL`)
-  are a future integration contract and are NOT required to run the current tests.
+  are a harness integration contract, not repo secrets. They are NOT required to run
+  `npm test`. When unset, `tests/live-jwks.test.mjs` skips the live fetch. When set,
+  that test fetches the JWKS and fails closed if the config is incomplete/insecure
+  or the URL is unresolvable. Do not log JWKS or token material. Do not enable auth
+  on the AGI static public Worker.
