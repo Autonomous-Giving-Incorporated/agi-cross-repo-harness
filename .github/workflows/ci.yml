@@ -30,3 +30,30 @@ jobs:
         with:
           node-version: 22
       - run: node src/verify-pinned-sources.mjs
+
+  # Data-level tenant isolation against a disposable Postgres service that carries
+  # a synthetic replica of the AGI platform RLS slice (sql/tenant-isolation-slice.sql).
+  # Synthetic data only; fails closed on any cross-tenant read.
+  tenant-isolation:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: harness_rls
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/harness_rls
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install psql client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - run: bash scripts/verify-tenant-isolation.sh

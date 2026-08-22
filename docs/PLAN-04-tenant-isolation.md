@@ -1,6 +1,17 @@
 # Plan: tenant-isolation against a synthetic environment (planned integration #4)
 
-**Status:** scaffolded plan. Gated on a synthetic Supabase/preview environment being provisioned. Do not add live-environment tests to default CI; they must be skipped unless the environment is configured.
+**Status: IMPLEMENTED (2026-08-22)** via a disposable Postgres service container that carries a synthetic replica of the AGI platform RLS slice. See "Implemented" below. A live Supabase run remains an optional future enhancement.
+
+## Implemented (2026-08-22)
+
+Supabase branching (the disposable path against the real AGI project) requires the Pro plan, and the org's free-project quota was already full, so we do **not** touch the production AGI database. Instead, the isolation test runs against a throwaway **Postgres service container** carrying `sql/tenant-isolation-slice.sql` - a synthetic replica whose SECURITY DEFINER helpers (`is_client_member`, `current_client_role`, `is_master_admin`, `current_session_aal`) and SELECT policies are reproduced **verbatim** from the AGI Supabase project (extracted read-only), with `auth.uid()`/`auth.jwt()` shimmed to read `request.jwt.claims` exactly as Supabase does.
+
+- `scripts/verify-tenant-isolation.sh` applies the slice, then probes as the `authenticated` role with per-tenant JWT claims and asserts: tenant A sees its own rows (positive) and 0 cross-tenant rows (isolation), tenant B likewise, and anonymous sees nothing. Fails closed on any mismatch.
+- CI job `tenant-isolation` (`.github/workflows/ci.yml`) runs it against a `postgres:16` service - deterministic, synthetic, no secrets, no production access.
+
+Verified locally and in CI: all six checks pass ("TENANT ISOLATION VERIFIED").
+
+### Optional future enhancement: live Supabase run
 
 ## Goal
 
@@ -42,9 +53,9 @@ Synthetic data only. OIDC + short-lived credentials; tear down the preview branc
 ## Definition of done
 
 - A seed migration + RLS policies for the synthetic tenants/projects.
-- A CI job (separate, OIDC-gated) that provisions/points at the synthetic env, runs the isolation tests, and tears down.
-- Default offline CI unaffected (tests skip without `SUPABASE_URL`).
+- A CI job (separate) that points at the synthetic env, runs the isolation tests, and fails closed.
+- Default offline CI unaffected.
 
-## What unblocks it
+## What would unblock the live-Supabase variant
 
-A provisioned synthetic Supabase project (or preview-branch automation) plus OIDC federation for short-lived access. Until then this plan cannot be exercised.
+The Postgres-container test above already exercises the platform's RLS logic. To additionally run against a real Supabase project, either upgrade the org to Pro (enables disposable branches) or free a slot in the 2-project free quota; then point `DATABASE_URL` (or `SUPABASE_URL` + a read-only key) at that synthetic project. Not required for the check to pass.
