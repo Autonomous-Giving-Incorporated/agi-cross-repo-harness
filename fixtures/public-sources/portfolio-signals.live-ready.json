@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-08-22",
+  "authority": "advisory_only",
+  "execution": { "state": "live", "reason": "synthetic_live_ready_fixture" },
+  "allocations": [{ "allocationId": "c6c2619f-3000-4000-8000-000000000001" }],
+  "privacy": {
+    "classification": "public_aggregate_only",
+    "piiAllowed": false,
+    "rawRegistryAllowed": false,
+    "donorHistoryAllowed": false,
+    "privateNotesAllowed": false
+  }
+}

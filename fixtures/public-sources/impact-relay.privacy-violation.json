@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-08-22",
+  "authority": "public_aggregate_only",
+  "summary": { "outcomeCount": 1, "totalParticipantsPublic": 1 },
+  "outcomes": [
+    { "outcomeId": "o1", "evidenceState": "VERIFIED", "donor_id": "donor_alice" }
+  ],
+  "privacy": {
+    "classification": "public_aggregate_only",
+    "piiAllowed": false,
+    "donorNamesAllowed": true,
+    "individualDonorAttributionAllowed": false,
+    "operatorIdentityAllowed": false
+  }
+}
