@@ -18,3 +18,15 @@ jobs:
           node-version: 22
       - run: npm ci
       - run: npm test
+
+  # Network-dependent: fetches the AGI-consumed public documents at the pinned
+  # revisions in refs/versions.json and runs the seam verifier against them.
+  # Kept separate from the deterministic, network-free unit tests above.
+  pinned-sources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node src/verify-pinned-sources.mjs

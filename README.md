@@ -21,8 +21,8 @@ The scaffold validates the local Hacker Dojo multi-project fixture and establish
 
 ## Planned integrations
 
-1. Pin a released Specs version. **Started:** `refs/versions.json` records Specs v2.0.0 (`c089739`) + consumer SHAs observed 2026-08-17 (Portfolio Signals `7c60db8` after #37). Not READY.
-2. Pin AGI, Portfolio Signals, and Impact Relay revisions in CI. **Started:** `refs/versions.json` records the SHAs, and `src/public-source-seam.mjs` verifies the AGI-consumed public documents against synthetic fixtures. Remaining: wire CI to check out (or fetch at the pinned SHA) the real consumer public documents and run the seam verifier against them. Unmerged draft SHAs are not recorded.
+1. Pin a released Specs version. **Started:** `refs/versions.json` records Specs v2.0.0 (`c089739`); consumer SHAs refreshed 2026-08-22. Not READY.
+2. Pin AGI, Portfolio Signals, and Impact Relay revisions in CI. **Done:** `refs/versions.json` pins the SHAs (refreshed 2026-08-22), and the `pinned-sources` CI job (`npm run verify:pinned-sources`, see `src/verify-pinned-sources.mjs`) fetches the real Portfolio Signals / Impact Relay public documents at those pinned revisions and runs the seam verifier against them, failing closed on any security violation or unverifiable source. This network-dependent job is kept separate from the network-free unit tests. Unmerged draft SHAs are not recorded.
 3. Replace the ephemeral key test with pinned non-production JWKS fixtures when the AGI edge issuer is configured.
 4. Add tenant-isolation tests against synthetic Supabase/preview environments.
 5. Add allocation, optional dual-approval, delegation, evidence, and public-projection acceptance tests.

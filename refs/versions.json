@@ -1,8 +1,8 @@
 {
   "specs": "c089739ba9b05b622a15230cabe717995d5aeffc",
-  "note": "Docs pin to Autonomous-Giving-Specs v2.0.0. Consumer SHAs observed 2026-08-17 (Portfolio Signals main after #37). Not READY. Unmerged AGI/IR draft SHAs are not recorded here.",
-  "agi": "a3633ef6fde797a3844acf3db118325050aa2572",
-  "fundIntel": "7c60db83a3759ef6df3a75d4cd7d9d88d3bf4f2d",
-  "impactRelay": "0229bff5388596429209d562849834874ef76d05",
-  "harness": "1cadfa66acde6fb42bc2d47be2bec14b754d8156"
+  "note": "Docs pin to Autonomous-Giving-Specs v2.0.0. Consumer SHAs observed 2026-08-22 (AGI main after autogive.app Cloudflare cutover; Portfolio Signals and Impact Relay main). Not READY. Unmerged draft SHAs are not recorded here.",
+  "agi": "dd5046f2fe4531296de01c5612e557909c299bc1",
+  "fundIntel": "59726ec290f31c3461427d3a6031d98ec5277b33",
+  "impactRelay": "6efe62b74b27ed1a4711ed12270fb0d5c3b7867d",
+  "harness": "16979e8095d74a024cfc15fba325951c3040321e"
 }
