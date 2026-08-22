@@ -1,8 +1,9 @@
 {
   "specs": "c089739ba9b05b622a15230cabe717995d5aeffc",
-  "note": "Docs pin to Autonomous-Giving-Specs v2.0.0. Consumer SHAs observed 2026-08-22 (AGI main after autogive.app Cloudflare cutover; Portfolio Signals and Impact Relay main). Not READY. Unmerged draft SHAs are not recorded here.",
-  "agi": "dd5046f2fe4531296de01c5612e557909c299bc1",
-  "fundIntel": "59726ec290f31c3461427d3a6031d98ec5277b33",
-  "impactRelay": "6efe62b74b27ed1a4711ed12270fb0d5c3b7867d",
-  "harness": "16979e8095d74a024cfc15fba325951c3040321e"
+  "specsMain": "26ea13793cdc6862d25b1aeb4207c3c319f4b2ff",
+  "note": "Docs pin to Autonomous-Giving-Specs v2.0.0 (`specs`). Consumer SHAs observed 2026-08-22 after suite-wide GitHub Actions SHA-pinning (AGI #22, Impact-Relay #15, Specs #12, Portfolio-Signals #50). `specsMain` is the Specs workflow-pin revision, not a Specs version bump. Not READY. Unmerged draft SHAs are not recorded here.",
+  "agi": "047e5a1bcd65779346f6e358716332641181b9af",
+  "fundIntel": "5dda59df16d389e4dac109f4ac33d1fd0b95014c",
+  "impactRelay": "d3ab1520b37cfe05a0c29b2199b97d6835b6b76f",
+  "harness": "9296d971957163f6afd4dbe972e273a777d409ce"
 }

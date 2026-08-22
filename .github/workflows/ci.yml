@@ -35,6 +35,22 @@ jobs:
           node-version: 22
       - run: node src/verify-pinned-sources.mjs
 
+  # Network-dependent: fetches each consumer's workflow files at the SHAs in
+  # refs/versions.json and fails closed if any `uses:` is a mutable tag/branch.
+  pinned-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+      - name: Verify suite actions are SHA-pinned
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node src/verify-pinned-actions.mjs
+
   # Data-level tenant isolation against a disposable Postgres service that carries
   # a synthetic replica of the AGI platform RLS slice (sql/tenant-isolation-slice.sql).
   # Synthetic data only; fails closed on any cross-tenant read.

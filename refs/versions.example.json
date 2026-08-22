@@ -1,5 +1,6 @@
 {
   "specs": "REPLACE_WITH_RELEASE_SHA",
+  "specsMain": "REPLACE_WITH_COMMIT_SHA",
   "agi": "REPLACE_WITH_COMMIT_SHA",
   "fundIntel": "REPLACE_WITH_COMMIT_SHA",
   "impactRelay": "REPLACE_WITH_COMMIT_SHA",
