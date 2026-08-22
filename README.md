@@ -23,6 +23,7 @@ The scaffold validates the local Hacker Dojo multi-project fixture and establish
 - data-level tenant isolation (`sql/tenant-isolation-slice.sql` + `scripts/verify-tenant-isolation.sh`): a disposable Postgres service carries a synthetic replica of the AGI platform RLS slice (SECURITY DEFINER helpers + read/write policies reproduced verbatim). Probes prove **read** isolation (a tenant reads only its own rows) and **write** isolation with the privilege/MFA gate (a director writes only its own tenant and only with MFA/aal2; cross-tenant writes and board_viewer writes are denied). Runs in the `tenant-isolation` CI job.
 - consumer revision pin in `refs/versions.json` (docs pin, not READY).
 - suite-wide GitHub Actions SHA-pin guard (`src/action-pins.mjs` + `src/verify-pinned-actions.mjs`): every `uses:` at the pinned consumer revisions must name a 40-char commit SHA. Mutable tags fail closed.
+- C3 public-data policy status (`src/c3-public-data-policy.mjs`): AGI `PUBLIC_DATA_POLICY_STATUS` and `docs/PUBLIC_DATA_POLICY.md` must stay **PROPOSED**. Invented approval fails closed. The `pinned-sources` job fetches the pinned AGI revision.
 
 ## Planned integrations
 
