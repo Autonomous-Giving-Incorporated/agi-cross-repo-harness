@@ -1,7 +1,7 @@
 {
   "specs": "c089739ba9b05b622a15230cabe717995d5aeffc",
   "specsMain": "4aa680f05d789781f7c595c3b1c69a8b8ee5cd58",
-  "note": "Docs pin to Autonomous-Giving-Specs v2.0.0 (`specs`). Product SHAs: PS #52 (`4c38323`), IR #17 (`59e3e8f`), Specs #17 (`4aa680f`), AGI #23 (`5bcb8ea`). Later docs-only tips (PS #55 `da5ee6b`, Specs #19 `385619c`) are observed, not product pins. `specs` pin unchanged. `specsMain` tracks Specs workflows (unchanged through #19). Self-pin `5712add` (harness #20). Not READY. C3 remains PROPOSED. Unmerged draft SHAs are not recorded here.",
+  "note": "Docs pin to Autonomous-Giving-Specs v2.0.0 (`specs`). Product SHAs: PS #52 (`4c38323`), IR #17 (`59e3e8f`), Specs #17 (`4aa680f`), AGI #23 (`5bcb8ea`). Later docs-only tips (PS #58 `3e5194c`, Specs #19 `385619c`) are observed, not product pins. `specs` pin unchanged. `specsMain` tracks Specs workflows (unchanged through #19). Self-pin `5712add` (harness #20). Not READY. C3 remains PROPOSED. Unmerged draft SHAs are not recorded here.",
   "agi": "5bcb8ea965b9ea8d67b9c55b5b4e8d67c0ddb0d0",
   "fundIntel": "4c38323be8d5da9a4d966663c12e9e5bd0743545",
   "impactRelay": "59e3e8fdf49fe0d7592b9e91082b907e028682b4",
